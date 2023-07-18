@@ -2,6 +2,7 @@ from datetime import datetime
 from src.serializers.users import UserSerializer
 from src.repositories.users import UserRepository
 from bson.objectid import ObjectId
+from src.helpers.config import generate_hashed_password
 
 
 class UserService:
@@ -19,12 +20,13 @@ class UserService:
     def create(self, user):
         user.createdAt = datetime.utcnow()
         user.updatedAt = user.createdAt
+        user.password = generate_hashed_password(user.password)
         user = user.dict(exclude_none=True)
-
         return UserSerializer.user_entity(self.repository.create(user))
 
     def update(self, id, user) -> dict:
         id = ObjectId(id)
+        user.password = generate_hashed_password(user.password)
         user = user.dict(exclude_none=True)
         result = self.repository.update(id, user)
         return UserSerializer.user_entity(result)

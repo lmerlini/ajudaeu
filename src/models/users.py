@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class UserBaseSchema(BaseModel):
     id: str | None = None
-    name: str = "Administrador "
+    name: str = "Administrador"
     username: str = "admin"
     password: str = "admin"
     active: bool = True
@@ -21,13 +21,14 @@ class UserBaseSchema(BaseModel):
 
 
 class UpdateUserSchema(BaseModel):
-    name: str
-    password: str
+    name: str = None
+    password: str = None
 
     class Config:
         from_attributes = True
         populate_by_name = True
         arbitrary_types_allowed = True
+
 
 
 class UserResponse(BaseModel):
@@ -39,3 +40,8 @@ class ListUserResponse(BaseModel):
     status: str
     results: int
     users: List[UserBaseSchema]
+
+
+
+
+
